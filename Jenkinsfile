@@ -45,7 +45,7 @@ pipeline {
                     curl -k -X "PUT" "https://s410-exam.cyber-ed.space:8081/api/v1/scan" \
                     -H 'Content-Type: application/json' \
                     -H 'X-API-Key: odt_SfCq7Csub3peq7Y6lSlQy5Ngp9sSYpJl' \
-                    -F "e24b8a18-0695-4ec0-b7fe-25e6e14b22d6" \
+                    -F "project=e24b8a18-0695-4ec0-b7fe-25e6e14b22d6" \
                     -d @sbom.json
                     '''
                     archiveArtifacts artifacts: 'sbom.json', allowEmptyArchive: true
