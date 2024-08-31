@@ -35,7 +35,7 @@ pipeline {
                     archiveArtifacts artifacts: 'zap.json', allowEmptyArchive: true
                 }
             }
-        }*/
+        }
         stage('deptrack'){
             steps {
                 script{
@@ -50,11 +50,13 @@ pipeline {
                     archiveArtifacts artifacts: 'payload.json', allowEmptyArchive: true
                 }
             }
-        }
+        }*/
         stage('defectdojo'){
             steps{
                 script{
-                    sh 'echo "dojo"'
+                    sh '''
+                    python dojo.py
+                    '''
                 }
             }
         }
