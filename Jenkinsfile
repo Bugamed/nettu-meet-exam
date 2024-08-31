@@ -55,7 +55,9 @@ pipeline {
             steps{
                 script{
                     sh '''
-                    apk add python3
+                    apk add python3 py3-pip
+                    pip install requests
+                    pip install sys
                     python3 dojo.py
                     '''
                 }
