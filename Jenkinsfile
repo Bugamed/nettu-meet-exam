@@ -62,7 +62,7 @@ pipeline {
             steps{
                 script{
                     sh '''
-                    curl -X -kL 'POST' \
+                    curl -X --insecure 'POST' \
                     'https://s410-exam.cyber-ed.space:8083/api/v2/import-scan/' \
                     -H 'accept: application/json' \
                     -H 'Authorization: Token c5b50032ffd2e0aa02e2ff56ac23f0e350af75b4' \
