@@ -20,7 +20,7 @@ pipeline {
                 sh'''
                 docker run -v ./report:/report aquasec/trivy repo https://github.com/Bugamed/nettu-meet-exam -f json -o /report/trivy.json
                 '''
-                archiveArtifacts artifacts: './report/trivy.json', allowEmptyArchive: true
+                archiveArtifacts artifacts: 'report/trivy.json', allowEmptyArchive: true
             }
         }
         stage('zap'){
