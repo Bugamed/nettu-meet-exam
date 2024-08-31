@@ -1,7 +1,7 @@
 pipeline {
     agent any
     stages{
-        /*stage('semgrep'){
+        stage('semgrep'){
             steps{
                 sh '''
                 apk add python3
@@ -18,9 +18,9 @@ pipeline {
             }
             steps{
                 sh '''
-                docker run -v ./report:/report aquasec/trivy repo https://github.com/Bugamed/nettu-meet-exam -f json -o /report/trivy.json
+                docker run -v \$(pwd)/:/report dockerhub.timeweb.cloud/aquasec/trivy repo https://github.com/Bugamed/nettu-meet-exam -f json -o /report/trivy.json
                 '''
-                archiveArtifacts artifacts: 'report/trivy.json', allowEmptyArchive: true
+                archiveArtifacts artifacts: 'trivy.json', allowEmptyArchive: true
             }
         }
         stage('zap'){
@@ -30,13 +30,13 @@ pipeline {
             steps{
                 script{
                     sh '''
-                    docker run -v \$(pwd)/:/zap/wrk/:rw -t zaproxy/zap-stable zap-baseline.py -I -t https://s410-exam.cyber-ed.space:8084 -J zap.json  
+                    docker run -v \$(pwd)/:/zap/wrk/:rw -t dockerhub.timeweb.cloud/zaproxy/zap-stable zap-baseline.py -I -t https://s410-exam.cyber-ed.space:8084 -J zap.json  
                     '''
                     archiveArtifacts artifacts: 'zap.json', allowEmptyArchive: true
                 }
             }
         }
-        stage('deptrack'){
+        /*stage('deptrack'){
             steps {
                 script{
                     sh '''
@@ -62,24 +62,27 @@ pipeline {
             steps{
                 script{
                     sh '''
-                    touch ./semgrep.json
-                    curl -X 'POST' -kL 'https://s410-exam.cyber-ed.space:8083/api/v2/import-scan/' \
-                    -H 'accept: application/json' -H 'X-CSRFTOKEN: sKJFjyoAkK1wUqpb2yPFwoi1JE5CwbR4TvyGwPMsDrKRMLoMlZtnqMn7jTeLv4vE' \
+                    curl -X 'POST' \
+                    'https://s410-exam.cyber-ed.space:8083/api/v2/import-scan/' \
+                    -H 'accept: application/json' \
                     -H 'Authorization: Token c5b50032ffd2e0aa02e2ff56ac23f0e350af75b4' \
                     -H 'Content-Type: multipart/form-data' \
+                    -H 'X-CSRFTOKEN: nurNnjql2zjlKVv4vMkW6kLjCzcjEl7iWIychPLgmkQ3lTMo9BpHtSbIaeUG7bOb' \
                     -F 'active=true' \
                     -F 'verified=true' \
+                    -F 'close_old_findings=false' \
                     -F 'deduplication_on_engagement=true' \
-                    -F 'minimum_severity=High' \
-                    -F 'scan_date=2024-08-31' \
-                    -F 'engagement_end_date=2024-08-31' \
-                    -F 'group_by=component_name' \
-                    -F 'tags=' \
-                    -F 'product_name=Mchernyak' \
+                    -F 'push_to_jira=false' \
+                    -F 'minimum_severity=Info' \
+                    -F 'close_old_findings_product_scope=false' \
+                    -F 'apply_tags_to_endpoints=true' \
+                    -F 'create_finding_groups_for_all_findings=true' \
+                    -F 'apply_tags_to_findings=true' \
+                    -F 'product_name=mchernyak' \
                     -F 'file=@semgrep.json;type=application/json' \
                     -F 'auto_create_context=true' \
-                    -F 'scan_type=semgrep_scan' \
-                    -F 'engagement=9'
+                    -F 'scan_type=Semgrep JSON Report' \
+                    -F 'engagement=55'
                     '''
                 }
             }
