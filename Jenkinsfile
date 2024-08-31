@@ -12,6 +12,29 @@ pipeline {
                 archiveArtifacts artifacts: 'semgrep.json', allowEmptyArchive: true
             }
         }
+        stage('trivy'){
+            agent dind
+            steps{
+                sh'''
+                docker run aquasec/trivy
+                trivy repo https://github.com/Bugamed/nettu-meet-exam
+                '''
+            }
+        }
+        stage('zap'){
+
+        }
+        stage('deptrack'){
+            steps {
+                
+                }
+        }
+        stage('defectdojo'){
+
+        }
+        stage('QG'){
+
+        }
         stage('Build') {
             steps {
                 script {
