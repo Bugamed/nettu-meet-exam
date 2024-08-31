@@ -41,13 +41,13 @@ pipeline {
                 script{
                     sh '''
                     curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
-                    syft dir:$(pwd) -o cyclonedx-json > sbom.json
+                    syft dir:$(pwd) -o cyclonedx-json > payload.json
                     curl -k -X "PUT" "https://s410-exam.cyber-ed.space:8081/api/v1/bom" \
                     -H 'Content-Type: application/json'\
                     -H 'X-API-Key: odt_SfCq7Csub3peq7Y6lSlQy5Ngp9sSYpJl' \
-                    -d @sbom.json
+                    -d @payload.json
                     '''
-                    archiveArtifacts artifacts: 'sbom.json', allowEmptyArchive: true
+                    archiveArtifacts artifacts: 'payload.json', allowEmptyArchive: true
                 }
             }
         }
