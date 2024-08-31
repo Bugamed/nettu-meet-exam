@@ -7,9 +7,9 @@ pipeline {
                 apk add python3
                 apk add --update pipx
                 pipx install semgrep; pipx ensurepath; source ~/.bashrc
-                /root/.local/bin/semgrep scan --config auto > semgrep.txt
+                /root/.local/bin/semgrep scan --config auto --json > semgrep.json
                 '''
-                archiveArtifacts artifacts: 'semgrep.txt', allowEmptyArchive: true
+                archiveArtifacts artifacts: 'semgrep.json', allowEmptyArchive: true
             }
         }
         stage('Build') {
