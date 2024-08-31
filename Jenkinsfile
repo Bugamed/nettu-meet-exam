@@ -84,6 +84,27 @@ pipeline {
                     -F 'scan_type=Semgrep JSON Report' \
                     -F 'engagement=55'
 
+                    curl --insecure -X 'POST' \
+                    'https://s410-exam.cyber-ed.space:8083/api/v2/import-scan/' \
+                    -H 'accept: application/json' \
+                    -H 'Authorization: Token c5b50032ffd2e0aa02e2ff56ac23f0e350af75b4' \
+                    -H 'Content-Type: multipart/form-data' \
+                    -H 'X-CSRFTOKEN: nurNnjql2zjlKVv4vMkW6kLjCzcjEl7iWIychPLgmkQ3lTMo9BpHtSbIaeUG7bOb' \
+                    -F 'active=true' \
+                    -F 'verified=true' \
+                    -F 'close_old_findings=false' \
+                    -F 'deduplication_on_engagement=true' \
+                    -F 'push_to_jira=false' \
+                    -F 'minimum_severity=Info' \
+                    -F 'close_old_findings_product_scope=false' \
+                    -F 'apply_tags_to_endpoints=true' \
+                    -F 'create_finding_groups_for_all_findings=true' \
+                    -F 'apply_tags_to_findings=true' \
+                    -F 'product_name=mchernyak' \
+                    -F 'file=@$(pwd)/trivy.json;type=application/json' \
+                    -F 'auto_create_context=true' \
+                    -F 'scan_type=Trivy Scan' \
+                    -F 'engagement=56'
                     
                     curl --insecure -X 'POST' \
                     'https://s410-exam.cyber-ed.space:8083/api/v2/import-scan/' \
@@ -102,7 +123,7 @@ pipeline {
                     -F 'create_finding_groups_for_all_findings=true' \
                     -F 'apply_tags_to_findings=true' \
                     -F 'product_name=mchernyak' \
-                    -F 'file=@zap.json;type=application/json' \
+                    -F 'file=@$(pwd)/zap.json;type=application/json' \
                     -F 'auto_create_context=true' \
                     -F 'scan_type=ZAP Scan' \
                     -F 'engagement=57'
