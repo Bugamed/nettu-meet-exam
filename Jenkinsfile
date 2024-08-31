@@ -13,7 +13,9 @@ pipeline {
             }
         }
         stage('trivy'){
-            agent dind
+            agent {
+                label 'dind'
+            }
             steps{
                 sh'''
                 docker run aquasec/trivy
