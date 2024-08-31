@@ -1,4 +1,34 @@
 pipeline {
+    agent any
+    stages{
+        stage('semgrep')
+          }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     agent { label 'docker-agent-alpine-jdk17'
         }
     stages {  
