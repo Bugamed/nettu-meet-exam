@@ -11,7 +11,7 @@ pipeline {
                 '''
                 archiveArtifacts artifacts: 'semgrep.json', allowEmptyArchive: true
             }
-        }*/
+        }
         stage('trivy'){
             agent {
                 label 'dind'
@@ -22,11 +22,16 @@ pipeline {
                 '''
                 archiveArtifacts artifacts: 'report/trivy.json', allowEmptyArchive: true
             }
-        }
+        }*/
         stage('zap'){
+            agent {
+                label 'dind'
+            }
             steps{
                 script{
-                    sh 'echo "zap"'
+                    sh '''
+                    docker run -v \$(pwd)/zap-reports:/zap/wrk/:rw -t owasp/zap2docker-stable zap-baseline.py -t https://s410-exam.cyber-ed.space -P 8084 -J zap.json 
+                    '''
                 }
             }
         }
