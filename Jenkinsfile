@@ -18,7 +18,7 @@ pipeline {
             }
             steps{
                 sh'''
-                docker run aquasec/trivy trivy repo https://github.com/Bugamed/nettu-meet-exam
+                docker run aquasec/trivy repo https://github.com/Bugamed/nettu-meet-exam
                 '''
             }
         }
