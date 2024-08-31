@@ -55,7 +55,8 @@ pipeline {
             steps{
                 script{
                     sh '''
-                    python dojo.py
+                    apk add python3
+                    python3 dojo.py
                     '''
                 }
             }
