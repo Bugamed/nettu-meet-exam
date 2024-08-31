@@ -41,13 +41,20 @@ pipeline {
                 script{
                     sh '''
                     curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
-                    syft dir:$(pwd) -o cyclonedx-json > payload.json
+                    syft dir:$(pwd) -o cyclonedx-xml@1.5 > sbom.xml
+
                     curl -k -X "PUT" "https://s410-exam.cyber-ed.space:8081/api/v1/bom" \
-                    -H 'Content-Type: application/json'\
+                    -H 'Content-Type: application/json' \
                     -H 'X-API-Key: odt_SfCq7Csub3peq7Y6lSlQy5Ngp9sSYpJl' \
-                    -d @payload.json
+                    -d '{
+                        "project": "e24b8a18-0695-4ec0-b7fe-25e6e14b22d6",
+                        "bom": {
+                            "format": "CycloneDX",
+                            "data": "'$(sbom.json)'"
+                                }
+                        }'
                     '''
-                    archiveArtifacts artifacts: 'payload.json', allowEmptyArchive: true
+                    archiveArtifacts artifacts: 'sbom.json', allowEmptyArchive: true
                 }
             }
         }*/
@@ -55,10 +62,23 @@ pipeline {
             steps{
                 script{
                     sh '''
-                    apk add python3 py3-pip
-                    pip install requests
-                    pip install sys
-                    python3 dojo.py
+                    curl -X 'POST' -kL 'https://s410-exam.cyber-ed.space:8083/api/v2/import-scan/' \
+                    -H 'accept: application/json' -H 'X-CSRFTOKEN: sKJFjyoAkK1wUqpb2yPFwoi1JE5CwbR4TvyGwPMsDrKRMLoMlZtnqMn7jTeLv4vE' \
+                    -H 'Authorization: Token c5b50032ffd2e0aa02e2ff56ac23f0e350af75b4' \
+                    -H 'Content-Type: multipart/form-data' \
+                    -F 'active=true' \
+                    -F 'verified=true' \
+                    -F 'deduplication_on_engagement=true' \
+                    -F 'minimum_severity=High' \
+                    -F 'scan_date=2024-08-31' \
+                    -F 'engagement_end_date=2024-08-31' \
+                    -F 'group_by=component_name' \
+                    -F 'tags=' \
+                    -F 'product_name=Mchernyak' \
+                    -F 'file=@semgrep.json;type=application/json' \
+                    -F 'auto_create_context=true' \
+                    -F 'scan_type=semgrep_scan' \
+                    -F 'engagement=9'
                     '''
                 }
             }
