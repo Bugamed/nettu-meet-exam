@@ -62,6 +62,7 @@ pipeline {
             steps{
                 script{
                     sh '''
+                    touch ./semgrep.json
                     curl -X 'POST' -kL 'https://s410-exam.cyber-ed.space:8083/api/v2/import-scan/' \
                     -H 'accept: application/json' -H 'X-CSRFTOKEN: sKJFjyoAkK1wUqpb2yPFwoi1JE5CwbR4TvyGwPMsDrKRMLoMlZtnqMn7jTeLv4vE' \
                     -H 'Authorization: Token c5b50032ffd2e0aa02e2ff56ac23f0e350af75b4' \
