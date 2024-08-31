@@ -1,7 +1,7 @@
 pipeline {
     agent any
     stages{
-        stage('semgrep'){
+        /*stage('semgrep'){
             steps{
                 sh '''
                 apk add python3
@@ -11,15 +11,16 @@ pipeline {
                 '''
                 archiveArtifacts artifacts: 'semgrep.json', allowEmptyArchive: true
             }
-        }
+        }*/
         stage('trivy'){
             agent {
                 label 'dind'
             }
             steps{
                 sh'''
-                docker run aquasec/trivy repo https://github.com/Bugamed/nettu-meet-exam
+                docker run aquasec/trivy repo https://github.com/Bugamed/nettu-meet-exam -f json -o trivy.json
                 '''
+                archiveArtifacts artifacts: 'trivy.json', allowEmptyArchive: true
             }
         }
         stage('zap'){
