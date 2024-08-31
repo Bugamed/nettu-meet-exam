@@ -18,9 +18,9 @@ pipeline {
             }
             steps{
                 sh '''
-                docker run -v \$(pwd)/:/report dockerhub.timeweb.cloud/aquasec/trivy repo https://github.com/Bugamed/nettu-meet-exam -f json -o /report/trivy.json
+                docker run -v ./report:/report dockerhub.timeweb.cloud/aquasec/trivy repo https://github.com/Bugamed/nettu-meet-exam -f json -o /report/trivy.json
                 '''
-                archiveArtifacts artifacts: 'trivy.json', allowEmptyArchive: true
+                archiveArtifacts artifacts: 'report/trivy.json', allowEmptyArchive: true
             }
         }
         stage('zap'){
@@ -30,9 +30,9 @@ pipeline {
             steps{
                 script{
                     sh '''
-                    docker run -v \$(pwd)/:/zap/wrk/:rw -t dockerhub.timeweb.cloud/zaproxy/zap-stable zap-baseline.py -I -t https://s410-exam.cyber-ed.space:8084 -J zap.json  
+                    docker run -v ./report:/zap/wrk/:rw -t dockerhub.timeweb.cloud/zaproxy/zap-stable zap-baseline.py -I -t https://s410-exam.cyber-ed.space:8084 -J zap.json  
                     '''
-                    archiveArtifacts artifacts: 'zap.json', allowEmptyArchive: true
+                    archiveArtifacts artifacts: 'report/zap.json', allowEmptyArchive: true
                 }
             }
         }
@@ -101,7 +101,7 @@ pipeline {
                     -F 'create_finding_groups_for_all_findings=true' \
                     -F 'apply_tags_to_findings=true' \
                     -F 'product_name=mchernyak' \
-                    -F 'file=@$(pwd)/trivy.json;type=application/json' \
+                    -F 'file=@report/trivy.json;type=application/json' \
                     -F 'auto_create_context=true' \
                     -F 'scan_type=Trivy Scan' \
                     -F 'engagement=56'
@@ -123,7 +123,7 @@ pipeline {
                     -F 'create_finding_groups_for_all_findings=true' \
                     -F 'apply_tags_to_findings=true' \
                     -F 'product_name=mchernyak' \
-                    -F 'file=@$(pwd)/zap.json;type=application/json' \
+                    -F 'file=@report/zap.json;type=application/json' \
                     -F 'auto_create_context=true' \
                     -F 'scan_type=ZAP Scan' \
                     -F 'engagement=57'
