@@ -24,18 +24,32 @@ pipeline {
             }
         }
         stage('zap'){
-
+            steps{
+                script{
+                    sh 'echo "zap"'
+                }
+            }
         }
         stage('deptrack'){
             steps {
-                
+                script{
+                    sh 'echo "dpt"'
                 }
+            }
         }
         stage('defectdojo'){
-
+            steps{
+                script{
+                    sh 'echo "dojo"'
+                }
+            }
         }
         stage('QG'){
-
+            steps{
+                script{
+                    sh 'echo "qg"'
+                }
+            }
         }
         stage('Build') {
             steps {
