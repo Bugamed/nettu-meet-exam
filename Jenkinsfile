@@ -103,7 +103,7 @@ pipeline {
                     -F 'product_name=mchernyak' \
                     -F 'file=@trivy.json;type=application/json' \
                     -F 'auto_create_context=true' \
-                    -F 'scan_type=Trivy Scan' \
+                    -F 'scan_type=Trivy Operator Scan' \
                     -F 'engagement=56'
                     
                     curl --insecure -X 'POST' \
