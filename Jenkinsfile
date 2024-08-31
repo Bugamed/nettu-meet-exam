@@ -30,7 +30,7 @@ pipeline {
             steps{
                 script{
                     sh '''
-                    docker run -v \$(pwd)/:/zap/wrk/:rw -t zaproxy/zap-stable zap-baseline.py -t https://s410-exam.cyber-ed.space:8084 -J zap.json  
+                    docker run -v \$(pwd)/:/zap/wrk/:rw -t zaproxy/zap-stable zap-baseline.py -I -t https://s410-exam.cyber-ed.space:8084 -J zap.json  
                     '''
                     archiveArtifacts artifacts: 'zap.json', allowEmptyArchive: true
                 }
