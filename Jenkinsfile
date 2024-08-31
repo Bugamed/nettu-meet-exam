@@ -17,12 +17,12 @@ pipeline {
                 label 'dind'
             }
             steps{
-                sh'''
+                sh '''
                 docker run -v ./report:/report aquasec/trivy repo https://github.com/Bugamed/nettu-meet-exam -f json -o /report/trivy.json
                 '''
                 archiveArtifacts artifacts: 'report/trivy.json', allowEmptyArchive: true
             }
-        }*/
+        }
         stage('zap'){
             agent {
                 label 'dind'
@@ -35,11 +35,15 @@ pipeline {
                     archiveArtifacts artifacts: 'zap.json', allowEmptyArchive: true
                 }
             }
-        }
+        }*/
         stage('deptrack'){
             steps {
                 script{
-                    sh 'echo "dpt"'
+                    sh '''
+                    curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
+                    syft dir:$(pwd) -o cyclonedx-json > sbom.json
+                    '''
+                    archiveArtifacts artifacts: 'sbom.json', allowEmptyArchive: true
                 }
             }
         }
